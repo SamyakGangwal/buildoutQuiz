@@ -80,6 +80,8 @@ dependencies {
 sourceSets {
     test {
         java.srcDirs = ['java/com/crio/buildouts/buildoutsqa']
+        java.srcDirs = ['java/com/crio/buildouts/integ/test']
+
     }
 }
 
