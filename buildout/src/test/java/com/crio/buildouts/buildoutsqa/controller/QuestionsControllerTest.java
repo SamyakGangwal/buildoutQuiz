@@ -42,7 +42,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @ActiveProfiles("test")
 class QuestionsControllerTest {
 
-  //test
+  //test1
   private static final String QUIZ_API_URI = "/quiz/";
   @InjectMocks
   private QuestionsController questionsController;
