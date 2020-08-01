@@ -56,7 +56,7 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     testCompile "org.springframework.boot:spring-boot-starter-test:2.3.1.RELEASE"
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0"
-    testCompile ('org.junit.jupiter:junit-jupiter:5.6.0')
+    testCompile('org.junit.jupiter:junit-jupiter:5.6.0')
     testCompile "org.springframework:spring-test:5.2.6.RELEASE"
     testCompile "org.junit.platform:junit-platform-engine:1.6.2"
 
@@ -76,7 +76,11 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$rootProject.ext.junitVersion")
 
 
-
+}
+sourceSets {
+    test {
+        java.srcDirs = ['java/com/crio/buildouts/buildoutsqa']
+    }
 }
 
 task loaddata(type: JavaExec) {

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Summary {
-    private int score;
-    private int total;
+  private int score;
+  private int total;
 }
 

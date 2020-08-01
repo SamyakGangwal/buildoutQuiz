@@ -1,20 +1,28 @@
 package com.crio.buildouts.buildoutsqa.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "questionId",
-        "title",
-        "description",
-        "type",
-        "options",
-        "correctAnswer"
+    "questionId",
+    "title",
+    "description",
+    "type",
+    "options",
+    "correctAnswer"
 })
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,30 +31,21 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Quizdto {
 
-    @JsonProperty("questionId")
-    public String questionId;
-    @JsonProperty("title")
-    public String title;
-    @JsonProperty("description")
-    public String description;
-    @JsonProperty("type")
-    public String type;
-    @JsonProperty("options")
-    public Options options;
-    @JsonProperty("correctAnswer")
-    public List<String> correctAnswer = null;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+  @JsonProperty("questionId")
+  public String questionId;
+  @JsonProperty("title")
+  public String title;
+  @JsonProperty("description")
+  public String description;
+  @JsonProperty("type")
+  public String type;
+  @JsonProperty("options")
+  public Options options;
+  @JsonProperty("correctAnswer")
+  public List<String> correctAnswer = null;
+  @JsonIgnore
+  private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
 }
 /*

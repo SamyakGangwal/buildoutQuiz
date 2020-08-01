@@ -1,11 +1,21 @@
 package com.crio.buildouts.buildoutsqa.controller;
 
-import com.crio.buildouts.buildoutsqa.buildoutsapp;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.data.mongodb.core.aggregation.ConditionalOperators.Cond.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
+import com.crio.buildouts.buildoutsqa.Buildoutsapp;
 import com.crio.buildouts.buildoutsqa.dto.Options;
 import com.crio.buildouts.buildoutsqa.dto.Quizdto;
 import com.crio.buildouts.buildoutsqa.service.QuestionService;
 import com.crio.buildouts.buildoutsqa.util.Utility;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.util.Collections;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,80 +35,66 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
-import java.util.Collections;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.data.mongodb.core.aggregation.ConditionalOperators.Cond.when;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(classes = {buildoutsapp.class})
+@SpringBootTest(classes = {Buildoutsapp.class})
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class QuestionsControllerTest {
 
-    @InjectMocks
-    private QuestionsController questionsController;
+  //test
+  private static final String QUIZ_API_URI = "/quiz/";
+  @InjectMocks
+  private QuestionsController questionsController;
+  @Mock
+  private QuestionService questionService;
+  private ObjectMapper objectMapper;
+  private MockMvc mvc;
 
-    @Mock
-    private QuestionService questionService;
+  @BeforeEach
+  public void setup() {
+    objectMapper = new ObjectMapper();
 
-    private ObjectMapper objectMapper;
+    MockitoAnnotations.initMocks(this);
 
-    private MockMvc mvc;
+    mvc = MockMvcBuilders.standaloneSetup(questionsController).build();
+  }
 
-    @BeforeEach
-    public void setup() {
-        objectMapper = new ObjectMapper();
+  @Test
+  void getQuestionsTest() throws Exception {
 
-        MockitoAnnotations.initMocks(this);
+    URI uri = UriComponentsBuilder
+        .fromPath("/quiz/")
+        .pathSegment("1")
+        .build().toUri();
 
-        mvc = MockMvcBuilders.standaloneSetup(questionsController).build();
-    }
+    assertEquals(QUIZ_API_URI + "1", uri.toString());
 
-    private static final String QUIZ_API_URI = "/quiz/";
+    MockHttpServletResponse response = mvc.perform(
+        get(uri.toString()).accept(APPLICATION_JSON)
+    ).andReturn().getResponse();
 
-    @Test
-    void getQuestionsTest() throws Exception {
+    assertEquals(HttpStatus.OK.value(), response.getStatus());
 
-        URI uri = UriComponentsBuilder
-                .fromPath("/quiz/")
-                .pathSegment("1")
-                .build().toUri();
+  }
 
-        assertEquals(QUIZ_API_URI + "1", uri.toString());
+  @Test
+  void checkAnswersTest() throws Exception {
 
-        MockHttpServletResponse response = mvc.perform(
-                get(uri.toString()).accept(APPLICATION_JSON)
-        ).andReturn().getResponse();
+    String requestContent = Utility
+        .fileToString("fixtures/sample_submit_question_request.json");
 
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    URI uri = UriComponentsBuilder
+        .fromPath("/quiz/")
+        .pathSegment("1")
+        .build().toUri();
 
-    }
+    MockHttpServletResponse response = mvc.perform(
+        get(uri.toString()).accept(APPLICATION_JSON)
+            .content(requestContent)
+    ).andReturn().getResponse();
 
-    @Test
-    void checkAnswersTest() throws Exception {
-
-        String requestContent = Utility
-                .fileToString("fixtures/sample_submit_question_request.json");
-
-        URI uri = UriComponentsBuilder
-                .fromPath("/quiz/")
-                .pathSegment("1")
-                .build().toUri();
-
-        MockHttpServletResponse response = mvc.perform(
-                get(uri.toString()).accept(APPLICATION_JSON)
-                .content(requestContent)
-        ).andReturn().getResponse();
-
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
-    }
+    assertEquals(HttpStatus.OK.value(), response.getStatus());
+  }
 
 }

@@ -5,8 +5,8 @@ import com.crio.buildouts.buildoutsqa.dto.Quizdto;
 import java.util.List;
 
 
-public interface repositoryservice {
+public interface Repositoryservice {
 
-    public List<Quizdto> findallquestions(String moduleId);
+  public List<Quizdto> findallquestions(String moduleId);
 
 }

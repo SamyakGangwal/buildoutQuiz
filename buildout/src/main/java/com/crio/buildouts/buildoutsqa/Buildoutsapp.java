@@ -10,21 +10,21 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @SpringBootApplication
 @EnableMongoRepositories
-public class buildoutsapp {
-    public static void main(String[] args) {
-        SpringApplication.run(buildoutsapp.class, args);
-    }
+public class Buildoutsapp {
+  public static void main(String[] args) {
+    SpringApplication.run(Buildoutsapp.class, args);
+  }
 
-    /**
-     * Fetches a ModelMapper instance.
-     *
-     * @return ModelMapper
-     */
-    @Bean // Want a new obj every time
-    @Scope("prototype")
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
+  /**
+   * Fetches a ModelMapper instance.
+   *
+   * @return ModelMapper
+   */
+  @Bean // Want a new obj every time
+  @Scope("prototype")
+  public ModelMapper modelMapper() {
+    return new ModelMapper();
+  }
 
 }
 

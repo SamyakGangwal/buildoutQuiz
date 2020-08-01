@@ -1,21 +1,34 @@
 package com.crio.buildouts.buildoutsqa.service;
 
-import com.crio.buildouts.buildoutsqa.exchanges.*;
-import com.crio.buildouts.buildoutsqa.reposervice.QuestionRepositoryserivceimpl;
 import com.crio.buildouts.buildoutsqa.dto.Quizdto;
-import com.crio.buildouts.buildoutsqa.reposervice.repositoryservice;
+import com.crio.buildouts.buildoutsqa.exchanges.GetQuestions;
+import com.crio.buildouts.buildoutsqa.exchanges.QuestionResponse;
+import com.crio.buildouts.buildoutsqa.exchanges.ResponseDetails;
+import com.crio.buildouts.buildoutsqa.exchanges.Summary;
+import com.crio.buildouts.buildoutsqa.exchanges.UserResponse;
+import com.crio.buildouts.buildoutsqa.exchanges.ValidateAnswersRequests;
+import com.crio.buildouts.buildoutsqa.exchanges.ValidateAnswersresponse;
+import com.crio.buildouts.buildoutsqa.reposervice.QuestionRepositoryserivceimpl;
+import com.crio.buildouts.buildoutsqa.reposervice.Repositoryservice;
 import com.jayway.jsonpath.internal.function.numeric.Sum;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
 
 @Service
 public class QuestionService {
+  @Autowired
+  private Repositoryservice questionrepo;
 
-    private repositoryservice questionrepo;
-
-    /*public String saveQuestions(Quizdto quizdto, String moduleId) {
+  /*public String saveQuestions(Quizdto quizdto, String moduleId) {
         Question question = Question.builder()
                 .correctAnswer(quizdto.getCorrectAnswer())
                 .description(quizdto.getDescription())
@@ -28,90 +41,92 @@ public class QuestionService {
         questionrepo.save(question);
 
         return question.getQuestionId();
-    }*/
+    }
+  */
 
-    public QuestionResponse findQuestions(String moduleId) {
+  public QuestionResponse findQuestions(String moduleId) {
 
-        ModelMapper modelMapper = new ModelMapper();
-        List<Quizdto> loadquestions = questionrepo.findallquestions(moduleId);
+    ModelMapper modelMapper = new ModelMapper();
+    List<Quizdto> loadquestions = questionrepo.findallquestions(moduleId);
 
-        List<GetQuestions> loadAllquestions = new ArrayList<>();
+    List<GetQuestions> loadAllquestions = new ArrayList<>();
 
-        for (Quizdto questionDto : loadquestions) {
-            loadAllquestions.add(modelMapper.map(questionDto, GetQuestions.class));
-        }
-
-        return new QuestionResponse(loadAllquestions);
+    for (Quizdto questionDto : loadquestions) {
+      loadAllquestions.add(modelMapper.map(questionDto, GetQuestions.class));
     }
 
-    public ValidateAnswersresponse checkAnswers(String moduleId, ValidateAnswersRequests AnswerRequest) {
-        List<Quizdto> questionsAsked = questionrepo.findallquestions(moduleId);
+    return new QuestionResponse(loadAllquestions);
+  }
 
-        List<UserResponse> checkuseranswers = AnswerRequest.getResponses();
+  public ValidateAnswersresponse checkAnswers(String moduleId,
+                                              ValidateAnswersRequests answerRequest) {
+    List<Quizdto> questionsAsked = questionrepo.findallquestions(moduleId);
 
-        ValidateAnswersresponse CheckAnswerResponse = verifyAnswer(questionsAsked, checkuseranswers);
+    List<UserResponse> checkuseranswers = answerRequest.getResponses();
 
-        return CheckAnswerResponse;
+    ValidateAnswersresponse checkAnswerResponse = verifyAnswer(questionsAsked, checkuseranswers);
+
+    return checkAnswerResponse;
+  }
+
+  private ValidateAnswersresponse verifyAnswer(List<Quizdto> questionsAsked,
+                                               List<UserResponse> checkuseranswers) {
+    ValidateAnswersresponse result = new ValidateAnswersresponse();
+
+    Map<String, Quizdto> quizMap = new HashMap<>();
+
+    for (Quizdto quizdto : questionsAsked) {
+      quizMap.put(quizdto.getQuestionId(), quizdto);
     }
 
-    private ValidateAnswersresponse verifyAnswer(List<Quizdto> questionsAsked,List<UserResponse> checkuseranswers) {
-        ValidateAnswersresponse result = new ValidateAnswersresponse();
+    //ValidateAnswersresponse validateAnswersresponse = new ValidateAnswersresponse();
+    List<ResponseDetails> questionResults = new ArrayList<>();
+    Summary summary = new Summary();
 
-        Map<String,Quizdto> QuizMap = new HashMap<>();
+    int score = 0;
+    for (UserResponse userResponse : checkuseranswers) {
+      ResponseDetails responseDetails = new ResponseDetails();
 
-        for (Quizdto quizdto:questionsAsked) {
-            QuizMap.put(quizdto.getQuestionId(),quizdto);
-        }
+      Quizdto qdto = quizMap.get(userResponse.getQuestionId());
 
-        ValidateAnswersresponse validateAnswersresponse = new ValidateAnswersresponse();
-        List<ResponseDetails> QuestionResults = new ArrayList<>();
-        Summary summary = new Summary();
+      //Quizdto responsedto = new Quizdto();
 
-        int score = 0;
-        for (UserResponse userResponse : checkuseranswers) {
-            ResponseDetails responseDetails = new ResponseDetails();
+      //for response details
+      responseDetails.setQuestionId(qdto.getQuestionId());
+      responseDetails.setTitle(qdto.getTitle());
+      responseDetails.setDescription(qdto.getDescription());
+      responseDetails.setType(qdto.getType());
+      responseDetails.setOptions(qdto.getOptions());
+      responseDetails.setCorrect(qdto.getCorrectAnswer());
+      responseDetails.setUserAnswer(userResponse.getUserResponse());
+      responseDetails.setExplanation(null);
 
-            Quizdto qdto = QuizMap.get(userResponse.getQuestionId());
+      if (checkAnswer(responseDetails.getUserAnswer(),
+          responseDetails.getCorrect())) {
+        responseDetails.setAnswerCorrect(true);
+        score++;
+      } else {
+        responseDetails.setAnswerCorrect(false);
+      }
 
-            Quizdto responsedto = new Quizdto();
-
-            //for response details
-            responseDetails.setQuestionId(qdto.getQuestionId());
-            responseDetails.setTitle(qdto.getTitle());
-            responseDetails.setDescription(qdto.getDescription());
-            responseDetails.setType(qdto.getType());
-            responseDetails.setOptions(qdto.getOptions());
-            responseDetails.setCorrect(qdto.getCorrectAnswer());
-            responseDetails.setUserAnswer(userResponse.getUserResponse());
-            responseDetails.setExplanation(null);
-
-            if(checkAnswer(responseDetails.getUserAnswer()
-                    ,responseDetails.getCorrect())) {
-                responseDetails.setAnswerCorrect(true);
-                score++;
-            }
-            else {
-                responseDetails.setAnswerCorrect(false);
-            }
-
-            QuestionResults.add(responseDetails);
-        }
-
-        result.setQuestions(QuestionResults);
-
-        summary.setScore(score);
-        summary.setTotal(checkuseranswers.size());
-
-        result.setSummary(summary);
-
-        return result;
+      questionResults.add(responseDetails);
     }
 
-    private boolean checkAnswer(List<String> UserResponse1,List<String> ActualAnswer1) {
-        Collections.sort(UserResponse1);
-        Collections.sort(ActualAnswer1);
+    result.setQuestions(questionResults);
 
-        return ActualAnswer1.equals(UserResponse1);
-    }
+    summary.setScore(score);
+    summary.setTotal(checkuseranswers.size());
+
+    result.setSummary(summary);
+
+    return result;
+  }
+
+  private boolean checkAnswer(List<String> userResponse1, List<String> actualAnswer1) {
+    Collections.sort(userResponse1);
+    Collections.sort(actualAnswer1);
+
+    return actualAnswer1.equals(userResponse1);
+  }
 
 }

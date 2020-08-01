@@ -1,13 +1,17 @@
 package com.crio.buildouts.buildoutsqa.models;
 
 import com.crio.buildouts.buildoutsqa.dto.Quizdto;
-import lombok.*;
+
+import java.util.List;
+import javax.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,17 +20,19 @@ import java.util.List;
 @Builder
 public class Question {
 
-    @Id
-    private String id;
+  @Id
+  private String id;
 
-    @NotNull
-    @Field("moduleId")
-    String moduleId;
+  @NotNull
+  @Field("moduleId")
+  String moduleId;
 
-    @NotNull
-    @Field("questions")
-    List<Quizdto> questions;
-    /*@NotNull
+  @NotNull
+  @Field("questions")
+  List<Quizdto> questions;
+
+
+  /*@NotNull
     public String questionId;
     @NotNull
     public String moduleId;
@@ -39,6 +45,7 @@ public class Question {
     @NotNull
     public Options options;
     @NotNull
-    public List<String> correctAnswer = new ArrayList<>();*/
+    public List<String> correctAnswer = new ArrayList<>();
+  */
 
 }

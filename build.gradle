@@ -1,4 +1,3 @@
-
 import java.time.Duration
 
 /*
@@ -37,7 +36,6 @@ ext {
     modelMapperVersion = "2.3.2"
     jacksonVersion = "2.9.8"
 }
-
 
 
 apply plugin: "idea"
@@ -126,8 +124,8 @@ subprojects {
         }
         useJUnitPlatform {
         }
-        testLogging.events ("STANDARD_ERROR")
-        testLogging.events ("STANDARD_OUT")
+        testLogging.events("STANDARD_ERROR")
+        testLogging.events("STANDARD_OUT")
         afterSuite { desc, result ->
             if (!desc.parent) {
                 println "\nTEST RESULT: ${result.resultType}"

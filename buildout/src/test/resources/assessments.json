@@ -1,6 +1,6 @@
 [
   {
-    "name":"verify data insert",
+    "name": "verify data insert",
     "url": "/quiz/1",
     "method": "PUT",
     "input": "initial_data_load.json",
