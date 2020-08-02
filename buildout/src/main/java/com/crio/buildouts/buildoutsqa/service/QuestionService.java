@@ -8,6 +8,7 @@ import com.crio.buildouts.buildoutsqa.exchanges.Summary;
 import com.crio.buildouts.buildoutsqa.exchanges.UserResponse;
 import com.crio.buildouts.buildoutsqa.exchanges.ValidateAnswersRequests;
 import com.crio.buildouts.buildoutsqa.exchanges.ValidateAnswersresponse;
+import com.crio.buildouts.buildoutsqa.models.Question;
 import com.crio.buildouts.buildoutsqa.reposervice.QuestionRepositoryserivceimpl;
 import com.crio.buildouts.buildoutsqa.reposervice.Repositoryservice;
 import com.jayway.jsonpath.internal.function.numeric.Sum;
@@ -28,21 +29,11 @@ public class QuestionService {
   @Autowired
   private Repositoryservice questionrepo;
 
-  /*public String saveQuestions(Quizdto quizdto, String moduleId) {
-        Question question = Question.builder()
-                .correctAnswer(quizdto.getCorrectAnswer())
-                .description(quizdto.getDescription())
-                .questionId(quizdto.getQuestionId())
-                .title(quizdto.getTitle())
-                .moduleId(moduleId)
-                .type(quizdto.getType())
-                .build();
+  public void saveQuestions(List<Quizdto> quizdto, String moduleId) {
 
-        questionrepo.save(question);
+    questionrepo.savequestions(quizdto,moduleId);
+  }
 
-        return question.getQuestionId();
-    }
-  */
 
   public QuestionResponse findQuestions(String moduleId) {
 

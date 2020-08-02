@@ -9,4 +9,5 @@ public interface Repositoryservice {
 
   public List<Quizdto> findallquestions(String moduleId);
 
+  public void savequestions(List<Quizdto> quizdtos,String moduleId);
 }

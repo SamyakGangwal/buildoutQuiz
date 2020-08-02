@@ -32,32 +32,32 @@ public class QuestionRepositoryserivceimpl implements Repositoryservice {
   public List<Quizdto> findallquestions(String moduleId) {
     List<Quizdto> questions = null;
 
-    //ModelMapper modelmapper = modelMapperProvider.get();
-
     List<Question> getquestions = extractMongoData(mongoTemplate, moduleId);
 
     if (getquestions.size() > 0) {
       questions = getquestions.get(0).getQuestions();
     }
 
-    /*
-        * mongoTemplate.find(new Query().addCriteria(Criteria.where("moduleId").is(moduleId)),
-            QuizQuestionsEntity.class);
-          List<QuestionDto> questions = null;
-          if (quizQuestionsEntities.size() > 0) {
-          questions = quizQuestionsEntities.get(0).getQuestions();
-          }
-    */
-
     return questions;
   }
 
-  public List<Question> extractMongoData(MongoTemplate mongoTemplate,
+  private List<Question> extractMongoData(MongoTemplate mongoTemplate,
                                          String moduleId) {
     List<Question> getQuestions = mongoTemplate
         .find(new Query().addCriteria(Criteria.where("moduleId").is(moduleId)),
             Question.class);
 
     return getQuestions;
+  }
+
+  @Override
+  public void savequestions(List<Quizdto> quizdtos,String moduleId) {
+    Question question = new Question();
+
+    question.setModuleId(moduleId);
+    question.setQuestions(quizdtos);
+
+    mongoTemplate.dropCollection("questions");
+    mongoTemplate.save(question,"questions");
   }
 }
