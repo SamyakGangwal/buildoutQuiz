@@ -14,7 +14,7 @@ GRADLE_OPTS="-Dgradle.user.home=~/gradle_cache"    #
 
 pip3 install pymongo
 
-while ! netstat -tna | grep 'LISTEN\>' | grep -q ':8080\>'; do
+while ! netstat -tna | grep 'LISTEN\>' | grep -q ':8081\>'; do
   echo "waiting for spring application to start"
   sleep 2 # time in seconds, tune it as needed
   
