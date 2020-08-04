@@ -34,7 +34,7 @@ public class QuestionsController {
                                               @PathVariable String moduleId) {
     questionService.saveQuestions(quizdto,moduleId);
 
-    return new ResponseEntity<>("successful", HttpStatus.OK);
+    return new ResponseEntity<>("", HttpStatus.OK);
   }
 
   @GetMapping("/{moduleId}")

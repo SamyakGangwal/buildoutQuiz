@@ -12,13 +12,14 @@ GRADLE_OPTS="-Dgradle.user.home=~/gradle_cache"    #
 
 ./gradlew clean bootrun &
 
-pip3 install pymongo
-
-while ! netstat -tna | grep 'LISTEN\>' | grep -q ':8080\>'; do
+while ! netstat -tna | grep 'LISTEN\>' | grep -q ':8081\>'; do
   echo "waiting for spring application to start"
   sleep 2 # time in seconds, tune it as needed
-  
 done
+
+mongo Questions-Database --eval "db.dropDatabase()"
+pip3 install pymongo
+python3 load_questions.py
 
 # If you have any script to load the data make sure that its part of this bash script.
 

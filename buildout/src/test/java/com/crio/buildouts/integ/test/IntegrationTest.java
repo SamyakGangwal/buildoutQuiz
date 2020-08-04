@@ -5,6 +5,14 @@
  *
  */
 
+// CRIO_SOLUTION_AND_STUB_START_MODULE_RESTAURANTSAPI
+
+/*
+ *
+ *  * Copyright (c) Crio.Do 2019. All rights reserved
+ *
+ */
+
 package com.crio.buildouts.integ.test;
 
 import com.crio.buildouts.integ.test.configs.AssessmentConfig;

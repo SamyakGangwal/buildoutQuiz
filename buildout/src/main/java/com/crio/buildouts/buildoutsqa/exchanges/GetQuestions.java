@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,17 +21,17 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GetQuestions {
 
-  @JsonProperty("questionId")
-  public String questionId;
-  @JsonProperty("title")
-  public String title;
-  @JsonProperty("type")
-  public String type;
-  @JsonProperty("options")
-  public Options options;
+  @NotNull
+  private String questionId;
+  @NotNull
+  private String title;
   @JsonIgnore
-  public String description;
+  private String description;
+  @NotNull
+  private String type;
+  @NotNull
+  private Options options;
   @JsonIgnore
-  public List<String> correctAnswer = null;
+  private List<String> correctAnswer;
 
 }

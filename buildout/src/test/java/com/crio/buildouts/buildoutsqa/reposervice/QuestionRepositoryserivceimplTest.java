@@ -62,6 +62,7 @@ class QuestionRepositoryserivceimplTest {
     List<Quizdto> testquiz = repositoryservice.findallquestions("1");
 
     assertEquals(3, testquiz.size());
+    assertEquals("001",testquiz.get(0).getQuestionId());
   }
 
   private List<Quizdto> listOfquestions() throws IOException {
