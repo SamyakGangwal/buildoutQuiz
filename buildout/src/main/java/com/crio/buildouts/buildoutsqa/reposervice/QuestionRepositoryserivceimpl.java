@@ -3,6 +3,7 @@ package com.crio.buildouts.buildoutsqa.reposervice;
 import com.crio.buildouts.buildoutsqa.dto.Quizdto;
 import com.crio.buildouts.buildoutsqa.models.Question;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Provider;
 
@@ -30,22 +31,28 @@ public class QuestionRepositoryserivceimpl implements Repositoryservice {
 
   @Override
   public List<Quizdto> findallquestions(String moduleId) {
-    List<Quizdto> questions = null;
-
-    List<Question> getquestions = extractMongoData(mongoTemplate, moduleId);
+    List<Quizdto> questions = new ArrayList<>();
+    String questionId = "";
+    List<Question> getquestions = extractMongoData(mongoTemplate, moduleId,questionId);
 
     if (getquestions.size() > 0) {
-      questions = getquestions.get(0).getQuestions();
-    }
-
+      questions = getquestions.get(0).getQuestions();  
+      }
+    
+    
     return questions;
   }
 
   private List<Question> extractMongoData(MongoTemplate mongoTemplate,
-                                         String moduleId) {
+                                         String moduleId,String questionId) {
+    
+    Query query = new Query();
+
+    query.addCriteria(new Criteria().andOperator(
+      Criteria.where("moduleId").is(moduleId)));
+
     List<Question> getQuestions = mongoTemplate
-        .find(new Query().addCriteria(Criteria.where("moduleId").is(moduleId)),
-            Question.class);
+        .find(query,Question.class);
 
     return getQuestions;
   }

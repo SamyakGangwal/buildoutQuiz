@@ -34,7 +34,7 @@ class QuizdtoTest {
 
     String jsonstring = "";
     jsonstring = new ObjectMapper().writeValueAsString(quiz);
-
+    
     JSONAssert.assertEquals(input, jsonstring, true);
   }
 

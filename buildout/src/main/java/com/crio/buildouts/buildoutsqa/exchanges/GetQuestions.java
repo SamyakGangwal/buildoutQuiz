@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 
@@ -13,12 +14,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class GetQuestions {
 
   @NotNull
@@ -29,8 +30,7 @@ public class GetQuestions {
   private String description;
   @NotNull
   private String type;
-  @NotNull
-  private Options options;
+  private LinkedHashMap<String, String> options;
   @JsonIgnore
   private List<String> correctAnswer;
 

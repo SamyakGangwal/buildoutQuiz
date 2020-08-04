@@ -2,6 +2,7 @@ package com.crio.buildouts.buildoutsqa.exchanges;
 
 import com.crio.buildouts.buildoutsqa.dto.Options;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 
@@ -23,7 +24,7 @@ public class ResponseDetails {
   private String description;
   @NotNull
   private String type;
-  private Options options;
+  private LinkedHashMap<String, String> options;
   private List<String> correct;
   private List<String> userAnswer;
   private String explanation;

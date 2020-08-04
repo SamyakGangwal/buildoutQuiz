@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,17 +33,17 @@ import lombok.NoArgsConstructor;
 public class Quizdto {
 
   @JsonProperty("questionId")
-  public String questionId;
+  private String questionId;
   @JsonProperty("title")
-  public String title;
+  private String title;
   @JsonProperty("description")
-  public String description;
+  private String description;
   @JsonProperty("type")
-  public String type;
+  private String type;
   @JsonProperty("options")
-  public Options options;
+  private LinkedHashMap<String, String> options;
   @JsonProperty("correctAnswer")
-  public List<String> correctAnswer = null;
+  private List<String> correctAnswer = null;
   @JsonIgnore
   private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
