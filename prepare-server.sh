@@ -21,6 +21,6 @@ mongo Questions-Database --eval "db.dropDatabase()"
 pip3 install pymongo
 python3 load_questions.py
 
-# If you have any script to load the data make sure that its part of this bash script.
+#If you have any script to load the data make sure that its part of this bash script.
 
 
