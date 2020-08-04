@@ -37,7 +37,7 @@ public class QuestionRepositoryserivceimpl implements Repositoryservice {
 
     if (getquestions.size() > 0) {
       questions = getquestions.get(0).getQuestions();  
-      }
+    }
     
     
     return questions;
@@ -49,7 +49,7 @@ public class QuestionRepositoryserivceimpl implements Repositoryservice {
     Query query = new Query();
 
     query.addCriteria(new Criteria().andOperator(
-      Criteria.where("moduleId").is(moduleId)));
+        Criteria.where("moduleId").is(moduleId)));
 
     List<Question> getQuestions = mongoTemplate
         .find(query,Question.class);
